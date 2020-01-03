@@ -1,0 +1,21 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v1.16.4
+apiServer:
+  certSANs:    #填写所有kube-apiserver节点的hostname、IP、VIP
+  - master01
+  - master02
+  - master03
+  - node01
+  - node02
+  - node03
+  - 172.27.34.3
+  - 172.27.34.4
+  - 172.27.34.5
+  - 172.27.34.93
+  - 172.27.34.94
+  - 172.27.34.95
+  - 172.27.34.130
+controlPlaneEndpoint: "172.27.34.130:6443"
+networking:
+  podSubnet: "10.244.0.0/16"

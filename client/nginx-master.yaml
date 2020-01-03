@@ -1,0 +1,17 @@
+apiVersion: apps/v1             #描述文件遵循extensions/v1beta1版本的Kubernetes API
+kind: Deployment                #创建资源类型为Deployment
+metadata:                       #该资源元数据
+  name: nginx-master            #Deployment名称
+spec:                           #Deployment的规格说明
+  selector:
+    matchLabels:
+      app: nginx 
+  replicas: 3                   #指定副本数为3
+  template:                     #定义Pod的模板
+    metadata:                   #定义Pod的元数据
+      labels:                   #定义label（标签）
+        app: nginx              #label的key和value分别为app和nginx
+    spec:                       #Pod的规格说明
+      containers:               
+      - name: nginx             #容器的名称
+        image: nginx:latest     #创建容器所使用的镜像

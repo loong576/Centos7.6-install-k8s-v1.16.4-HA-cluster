@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-svc
+spec:
+  selector:
+    matchLabels:
+      app: web-svc
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: web-svc
+    spec:
+      containers:
+      - name: web-svc
+        image: httpd:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+spec:
+  type: NodePort
+  selector:
+    app: web-svc
+  ports:
+  - protocol: TCP
+    nodePort: 30002
+    port: 8080
+    targetPort: 80
