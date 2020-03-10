@@ -35,7 +35,7 @@
 
 
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/kyg5r997lf.png)
+![image-20200308233202050](https://i.loli.net/2020/03/08/EcThua8xpKQezAi.png)
 
 
 
@@ -89,21 +89,18 @@ master01
 172.27.34.94   work02
 172.27.34.95   work03
 EOF
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/hq7h8xehau.png)
+![image-20200308234056556](https://i.loli.net/2020/03/08/PTFNpBIs91SLUDn.png)
 
 ## 2. 验证mac地址uuid
 
 ```bash
 [root@master01 ~]# cat /sys/class/net/ens160/address
 [root@master01 ~]# cat /sys/class/dmi/id/product_uuid
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/7rynretezv.png)
-
+![image-20200308234223429](https://i.loli.net/2020/03/08/tDSqOcf4PGvawxs.png)
 保证各节点mac和uuid唯一
 
 ## 3. 禁用swap
@@ -112,7 +109,6 @@ EOF
 
 ```bash
 [root@master01 ~]# swapoff -a
-
 ```
 
 ### 3.2 永久禁用
@@ -121,10 +117,9 @@ EOF
 
 ```bash
 [root@master01 ~]# sed -i.bak '/swap/s/^/#/' /etc/fstab
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/41n43q7q39.png)
+![image-20200308234327601](https://i.loli.net/2020/03/08/mykqYbj8QG69ar1.png)
 
 ## 4. 内核参数修改
 
@@ -136,7 +131,6 @@ EOF
 
 ```bash
 [root@master01 ~]# lsmod |grep br_netfilter
-
 ```
 
 如果系统没有br_netfilter模块则执行下面的新增命令，如有则忽略。
@@ -145,7 +139,6 @@ EOF
 
 ```bash
 [root@master01 ~]# modprobe br_netfilter
-
 ```
 
 该方式重启后会失效
@@ -163,10 +156,9 @@ EOF
 modprobe br_netfilter
 EOF
 [root@master01 ~]# chmod 755 /etc/sysconfig/modules/br_netfilter.modules
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/sq78j6wvdc.png)
+![image-20200308234424412](https://i.loli.net/2020/03/08/JkG1WdTlOsIZFfU.png)
 
 ### 4.2 内核参数临时修改
 
@@ -189,7 +181,7 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/thudn6to7d.png)
+![image-20200308234508098](https://i.loli.net/2020/03/08/YMCgPVGBEvjR8qT.png)
 
 ## 5. 设置kubernetes源
 
@@ -205,7 +197,6 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
-
 ```
 
 > - [] 中括号中的是repository id，唯一，用来标识不同仓库
@@ -221,7 +212,6 @@ EOF
 ```bash
 [root@master01 ~]# yum clean all
 [root@master01 ~]# yum -y makecache
-
 ```
 
 ## 6. 免密登录
@@ -232,30 +222,27 @@ EOF
 
 ```bash
 [root@master01 ~]# ssh-keygen -t rsa
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/padaasg2rh.png)
+![image-20200308234613464](https://i.loli.net/2020/03/08/WAiKLk8DzlyaU1Z.png)
 
 ### 6.2 将秘钥同步至master02/master03
 
 ```bash
 [root@master01 ~]# ssh-copy-id -i /root/.ssh/id_rsa.pub root@172.27.34.4
 [root@master01 ~]# ssh-copy-id -i /root/.ssh/id_rsa.pub root@172.27.34.5
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/y06bzqpgq0.png)
+![image-20200308234710352](https://i.loli.net/2020/03/08/yx31eIJDitPMUcv.png)
 
 ### 6.3 免密登陆测试
 
 ```bash
 [root@master01 ~]# ssh 172.27.34.4
 [root@master01 ~]# ssh master03
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/5cqo22oy4x.png)
+![image-20200308234750743](https://i.loli.net/2020/03/08/ZCPrYA2sBkKb1en.png)
 
 master01可以直接登录master02和master03，不需要输入密码。
 
@@ -267,19 +254,17 @@ control plane和work节点都执行本部分操作。
 
 ```bash
 [root@master01 ~]# yum install -y yum-utils   device-mapper-persistent-data   lvm2
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/6efexyvjjv.png)
+![image-20200308234858636](https://i.loli.net/2020/03/08/vUak7iTlDBKhHmS.png)
 
 ## 2. 设置Docker源
 
 ```bash
 [root@master01 ~]# yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/xthn49uqjp.png)
+![image-20200308234944098](https://i.loli.net/2020/03/08/o6cLusz4HGRWSwV.png)
 
 ## 3. 安装Docker CE
 
@@ -287,19 +272,17 @@ control plane和work节点都执行本部分操作。
 
 ```bash
 [root@master01 ~]# yum list docker-ce --showduplicates | sort -r
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/b91a7tu3ig.png)
+![image-20200308235024772](https://i.loli.net/2020/03/08/jfzGyEX5uriPLS4.png)
 
 ### 3.2 安装docker
 
 ```bash
 [root@master01 ~]# yum install docker-ce-18.09.9 docker-ce-cli-18.09.9 containerd.io -y
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/sjwzchvrg5.png)
+![image-20200308235110109](https://i.loli.net/2020/03/08/6Z37HQAnF2mJ5zr.png)
 指定安装的docker版本为18.09.9
 
 ## 4. 启动Docker
@@ -307,10 +290,9 @@ control plane和work节点都执行本部分操作。
 ```bash
 [root@master01 ~]# systemctl start docker
 [root@master01 ~]# systemctl enable docker
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/gb2m14dji4.png)
+![image-20200308235209620](https://i.loli.net/2020/03/08/OvUzn8PyImwCFW6.png)
 
 ## 5. 命令补全
 
@@ -318,17 +300,15 @@ control plane和work节点都执行本部分操作。
 
 ```bash
 [root@master01 ~]# yum -y install bash-completion
-
 ```
 
 ### 5.2 加载bash-completion
 
 ```bash
 [root@master01 ~]# source /etc/profile.d/bash_completion.sh
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/i6ihqdcug0.png)
+![image-20200308235253548](https://i.loli.net/2020/03/08/NyWn2B8cbX1V59M.png)
 
 ## 6. 镜像加速
 
@@ -338,7 +318,7 @@ control plane和work节点都执行本部分操作。
 
 登陆地址为：https://cr.console.aliyun.com ,未注册的可以先注册阿里云账户
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/zfpp5kt87u.png)
+![image-20200308235440586](https://i.loli.net/2020/03/08/5guArBUOIVnJpEF.png)
 
 ### 6.2 配置镜像加速器
 
@@ -351,7 +331,6 @@ control plane和work节点都执行本部分操作。
   "registry-mirrors": ["https://v16stybc.mirror.aliyuncs.com"]
 }
 EOF
-
 ```
 
 **重启服务**
@@ -359,10 +338,9 @@ EOF
 ```bash
 [root@master01 ~]# systemctl daemon-reload
 [root@master01 ~]# systemctl restart docker
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/an0wlxt82l.png)
+![image-20200308235538222](https://i.loli.net/2020/03/08/2OEkm3yzPafcY64.png)
 
 加速器配置完成
 
@@ -371,10 +349,9 @@ EOF
 ```bash
 [root@master01 ~]# docker --version
 [root@master01 ~]# docker run hello-world
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/e8r5jfaq0j.png)
+![image-20200308235623691](https://i.loli.net/2020/03/08/PmoYiC5vAsBtzEF.png)
 
 通过查询docker版本和运行容器hello-world来验证docker是否安装成功。
 
@@ -390,7 +367,6 @@ EOF
   "registry-mirrors": ["https://v16stybc.mirror.aliyuncs.com"],
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
-
 ```
 
 ### 8.2 重新加载docker
@@ -398,7 +374,6 @@ EOF
 ```bash
 [root@master01 ~]# systemctl daemon-reload
 [root@master01 ~]# systemctl restart docker
-
 ```
 
 修改cgroupdriver是为了消除告警：
@@ -412,10 +387,9 @@ control plane节点都执行本部分操作。
 
 ```bash
 [root@master01 ~]# yum -y install keepalived
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/ei102fex8m.png)
+![image-20200308235704759](https://i.loli.net/2020/03/08/GKZiLz43laHj9et.png)
 
 ## 2. keepalived配置
 
@@ -441,7 +415,6 @@ vrrp_instance VI_1 {
         172.27.34.130
     }
 }
-
 ```
 
 **master02上keepalived配置：**
@@ -498,19 +471,17 @@ vrrp_instance VI_1 {
 ```bash
 [root@master01 ~]# service keepalived start
 [root@master01 ~]# systemctl enable keepalived
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/x70a2zppuu.png)
+![image-20200308235744870](https://i.loli.net/2020/03/08/5YIv4higjsmUrVa.png)
 
 ## 4. VIP查看
 
 ```bash
 [root@master01 ~]# ip a
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/6easm93q9f.png)
+![image-20200308235827632](https://i.loli.net/2020/03/08/2A1heopzKCsY54n.png)
 
 vip在master01上
 
@@ -522,10 +493,9 @@ control plane和work节点都执行本部分操作。
 
 ```bash
 [root@master01 ~]# yum list kubelet --showduplicates | sort -r
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/5pnhqmbgfl.png)
+![image-20200308235926531](https://i.loli.net/2020/03/08/lwUutzbF3S6mDAv.png)
 
 本文安装的kubelet版本是1.16.4，该版本支持的docker版本为1.13.1, 17.03, 17.06, 17.09, 18.06, 18.09。
 
@@ -535,10 +505,9 @@ control plane和work节点都执行本部分操作。
 
 ```bash
 [root@master01 ~]# yum install -y kubelet-1.16.4 kubeadm-1.16.4 kubectl-1.16.4
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/g5xr20jqgk.png)
+![image-20200309000000283](https://i.loli.net/2020/03/08/l7qLu3vFbedQgPZ.png)
 
 ### 2.2 安装包说明
 
@@ -552,7 +521,6 @@ control plane和work节点都执行本部分操作。
 
 ```bash
 [root@master01 ~]# systemctl enable kubelet && systemctl start kubelet
-
 ```
 
 ### 2.4 kubectl命令补全
@@ -560,7 +528,6 @@ control plane和work节点都执行本部分操作。
 ```bash
 [root@master01 ~]# echo "source <(kubectl completion bash)" >> ~/.bash_profile
 [root@master01 ~]# source .bash_profile 
-
 ```
 
 ## 3. 下载镜像
@@ -580,7 +547,6 @@ for imagename in ${images[@]} ; do
   docker tag $url/$imagename k8s.gcr.io/$imagename
   docker rmi -f $url/$imagename
 done
-
 ```
 
 url为阿里云镜像仓库地址，version为安装的kubernetes版本。
@@ -592,10 +558,9 @@ url为阿里云镜像仓库地址，version为安装的kubernetes版本。
 ```bash
 [root@master01 ~]# ./image.sh
 [root@master01 ~]# docker images
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/t6n6n2wb41.png)
+![image-20200309000058989](https://i.loli.net/2020/03/09/fa9ExPgZV4Mn3D5.png)
 
 # 七、初始化Master
 
@@ -626,7 +591,6 @@ apiServer:
 controlPlaneEndpoint: "172.27.34.130:6443"
 networking:
   podSubnet: "10.244.0.0/16"
-
 ```
 
 kubeadm.conf为初始化的配置文件
@@ -635,10 +599,9 @@ kubeadm.conf为初始化的配置文件
 
 ```bash
 [root@master01 ~]# kubeadm init --config=kubeadm-config.yaml
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/btyzlpa64f.png)
+![image-20200309000140786](https://i.loli.net/2020/03/09/BAEUCaktixcS496.png)
 
 记录kubeadm join的输出，后面需要这个命令将work节点和其他control plane节点加入集群中。
 
@@ -654,7 +617,6 @@ Then you can join any number of worker nodes by running the following on each as
 
 kubeadm join 172.27.34.130:6443 --token qbwt6v.rr4hsh73gv8vrcij \
     --discovery-token-ca-cert-hash sha256:e306ffc7a126eb1f2c0cab297bbbed04f5bb464a04c05f1b0171192acbbae966 
-
 ```
 
 **初始化失败：**
@@ -664,17 +626,15 @@ kubeadm join 172.27.34.130:6443 --token qbwt6v.rr4hsh73gv8vrcij \
 ```
 [root@master01 ~]# kubeadm reset
 [root@master01 ~]# rm -rf $HOME/.kube/config
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/42ehadajdk.png)
+![image-20200309000219191](https://i.loli.net/2020/03/09/53o2qCFVM6kwS9a.png)
 
 ## 3. 加载环境变量
 
 ```bash
 [root@master01 ~]# echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 [root@master01 ~]# source .bash_profile
-
 ```
 
 本文所有操作都在root用户下执行，若为非root用户，则执行如下操作：
@@ -683,7 +643,6 @@ kubeadm join 172.27.34.130:6443 --token qbwt6v.rr4hsh73gv8vrcij \
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
-
 ```
 
 ## 4. 安装flannel网络
@@ -692,10 +651,9 @@ chown $(id -u):$(id -g) $HOME/.kube/config
 
 ```bash
 [root@master01 ~]# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/p5k9q2zjzs.png)
+![image-20200309000309401](https://i.loli.net/2020/03/09/2fYmkXH4V1ZNcet.png)
 
 由于网络原因，可能会安装失败，可以在文末直接下载kube-flannel.yml文件，然后再执行apply
 
@@ -724,10 +682,9 @@ for host in ${CONTROL_PLANE_IPS}; do
     # Quote this line if you are using external etcd
     scp /etc/kubernetes/pki/etcd/ca.key "${USER}"@$host:etcd-ca.key
 done
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/118goxcvr1.png)
+![image-20200309000346676](https://i.loli.net/2020/03/09/DWXihewG4S1s87q.png)
 
 **master02移动证书至指定目录：**
 
@@ -751,7 +708,6 @@ mv /${USER}/etcd-ca.crt /etc/kubernetes/pki/etcd/ca.crt
 # Quote this line if you are using external etcd
 mv /${USER}/etcd-ca.key /etc/kubernetes/pki/etcd/ca.key
 [root@master02 ~]# ./cert-other-master.sh 
-
 ```
 
 **master03移动证书至指定目录：**
@@ -764,7 +720,6 @@ mv /${USER}/etcd-ca.key /etc/kubernetes/pki/etcd/ca.key
 [root@master03 ~]# ll|grep cert-other-master.sh 
 -rwxr--r--  1 root root  484 1月   2 15:31 cert-other-master.sh
 [root@master03 ~]# ./cert-other-master.sh 
-
 ```
 
 ## 2. master02加入集群
@@ -773,12 +728,11 @@ mv /${USER}/etcd-ca.key /etc/kubernetes/pki/etcd/ca.key
 kubeadm join 172.27.34.130:6443 --token qbwt6v.rr4hsh73gv8vrcij \
     --discovery-token-ca-cert-hash sha256:e306ffc7a126eb1f2c0cab297bbbed04f5bb464a04c05f1b0171192acbbae966 \
     --control-plane
-
 ```
 
 运行初始化master生成的control plane节点加入集群的命令
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/e8xvu7c3rw.png)
+![image-20200309000440211](https://i.loli.net/2020/03/09/dkF6oSPAKBqCZwc.png)
 
 ## 3. master03加入集群
 
@@ -786,10 +740,9 @@ kubeadm join 172.27.34.130:6443 --token qbwt6v.rr4hsh73gv8vrcij \
 kubeadm join 172.27.34.130:6443 --token qbwt6v.rr4hsh73gv8vrcij \
     --discovery-token-ca-cert-hash sha256:e306ffc7a126eb1f2c0cab297bbbed04f5bb464a04c05f1b0171192acbbae966 \
     --control-plane
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/tj2yeozskz.png)
+![image-20200309000524986](https://i.loli.net/2020/03/09/BXHdnZShM2mAb61.png)
 
 ## 4. 加载环境变量
 
@@ -799,14 +752,12 @@ master02和master03加载环境变量
 [root@master02 ~]# scp master01:/etc/kubernetes/admin.conf /etc/kubernetes/
 [root@master02 ~]# echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 [root@master02 ~]# source .bash_profile 
-
 ```
 
 ```bash
 [root@master03 ~]# scp master01:/etc/kubernetes/admin.conf /etc/kubernetes/
 [root@master03 ~]# echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 [root@master03 ~]# source .bash_profile 
-
 ```
 
 该步操作是为了在master02和master03上也能执行kubectl命令。
@@ -816,10 +767,10 @@ master02和master03加载环境变量
 ```bash
 [root@master01 ~]# kubectl get nodes
 [root@master01 ~]# kubectl get po -o wide -n kube-system 
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/4tijy0uhrm.png)所有control plane节点处于ready状态，所有的系统组件也正常。
+![image-20200309000557213](https://i.loli.net/2020/03/09/Oqu7AxikQfVv6LY.png)
+所有control plane节点处于ready状态，所有的系统组件也正常。
 
 # 九、work节点加入集群
 
@@ -828,20 +779,19 @@ master02和master03加载环境变量
 ```bash
 kubeadm join 172.27.34.130:6443 --token qbwt6v.rr4hsh73gv8vrcij \
     --discovery-token-ca-cert-hash sha256:e306ffc7a126eb1f2c0cab297bbbed04f5bb464a04c05f1b0171192acbbae966 
-
 ```
 
 运行初始化master生成的work节点加入集群的命令
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/zez2p9ykar.png)
+![image-20200309000746059](https://i.loli.net/2020/03/09/JM1Um9Wn5iPvcDl.png)
 
 ## 2. work02加入集群
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/0ya2t20fiw.png)
+![image-20200309000823234](https://i.loli.net/2020/03/09/i76KeXNYtkQMG2B.png)
 
 ## 3. work03加入集群
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/up4cumcj1t.png)
+![image-20200309000900617](https://i.loli.net/2020/03/09/VFtTIWulfa5XzkO.png)
 
 ## 4. 集群节点查看
 
@@ -856,7 +806,7 @@ work02     Ready    <none>   7m50s   v1.16.4
 work03     Ready    <none>   3m4s    v1.16.4
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/nugowukd6q.png)
+![image-20200309000948889](https://i.loli.net/2020/03/09/ANWiybvEZGKJnqH.png)
 
 # 十、client配置
 
@@ -874,27 +824,24 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/g5i1vrmc55.png)
+![image-20200309001014941](https://i.loli.net/2020/03/09/RfcDe72WGSAHsZt.png)
 
 ### 1.2 更新缓存
 
 ```bash
 [root@client ~]# yum clean all
 [root@client ~]# yum -y makecache
-
 ```
 
 ## 2. 安装kubectl
 
 ```bash
 [root@client ~]# yum install -y kubectl-1.16.4
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/qrkkeulll7.png)
+![image-20200309001105726](https://i.loli.net/2020/03/09/t3L9JdlT5Kyx4kU.png)
 
 安装版本与集群版本保持一致
 
@@ -904,17 +851,15 @@ EOF
 
 ```bash
 [root@client ~]# yum -y install bash-completion
-
 ```
 
 ### 3.2 加载bash-completion
 
 ```bash
 [root@client ~]# source /etc/profile.d/bash_completion.sh
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/mgwjs95vc0.png)
+![image-20200309001144974](https://i.loli.net/2020/03/09/yQRW9nerwgV8EbT.png)
 
 ### 3.3 拷贝admin.conf
 
@@ -923,17 +868,15 @@ EOF
 [root@client ~]# scp 172.27.34.3:/etc/kubernetes/admin.conf /etc/kubernetes/
 [root@client ~]# echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 [root@client ~]# source .bash_profile 
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/6tmgg0k636.png)
+![image-20200309001214217](https://i.loli.net/2020/03/09/B91fOyWUdRSEjoQ.png)
 
 ### 3.4 加载环境变量
 
 ```bash
 [root@master01 ~]# echo "source <(kubectl completion bash)" >> ~/.bash_profile
 [root@master01 ~]# source .bash_profile 
-
 ```
 
 ## 4. kubectl测试
@@ -942,12 +885,11 @@ EOF
 [root@client ~]# kubectl get nodes 
 [root@client ~]# kubectl get cs
 [root@client ~]# kubectl get po -o wide -n kube-system 
-
 ```
 
 
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/l296qfuqx6.png)
+![image-20200309001250348](https://i.loli.net/2020/03/09/kvjrwaJHEmIDGQT.png)
 
 # 十一、Dashboard搭建
 
@@ -957,7 +899,6 @@ EOF
 
 ```bash
 [root@client ~]# wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
-
 ```
 
 如果连接超时，可以多试几次。recommended.yaml已上传，也可以在文末下载。
@@ -968,7 +909,6 @@ EOF
 
 ```bash
 [root@client ~]# sed -i 's/kubernetesui/registry.cn-hangzhou.aliyuncs.com\/loong576/g' recommended.yaml
-
 ```
 
 由于默认的镜像仓库网络访问不通，故改成阿里镜像
@@ -977,7 +917,6 @@ EOF
 
 ```bash
 [root@client ~]# sed -i '/targetPort: 8443/a\ \ \ \ \ \ nodePort: 30001\n\ \ type: NodePort' recommended.yaml
-
 ```
 
 配置NodePort，外部通过https://NodeIp:NodePort 访问Dashboard，此时端口为30001
@@ -1007,10 +946,9 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-admin
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/sivm6c9kma.png)
+![image-20200309001333830](https://i.loli.net/2020/03/09/Mh5p6ZyA32Ewtvm.png)
 
 创建超级管理员的账号用于登录Dashboard
 
@@ -1020,48 +958,44 @@ roleRef:
 
 ```bash
 [root@client ~]# kubectl apply -f recommended.yaml
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/nhi31hx0o5.png)
+![image-20200309001410669](https://i.loli.net/2020/03/09/7uJI6r1xBEPFHtq.png)
 
 ### 3.2 状态查看
 
 ```bash
 [root@client ~]# kubectl get all -n kubernetes-dashboard 
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/2ainkxdrrm.png)
+![image-20200309001442265](https://i.loli.net/2020/03/09/JdHFDSuRkQw8tIE.png)
 
 ### 3.3 令牌查看
 
 ```bash
 [root@client ~]# kubectl describe secrets -n kubernetes-dashboard dashboard-admin
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/vsfwrfzh81.png) 
+![image-20200309001513147](https://i.loli.net/2020/03/09/PGWnhbLiCJMEZ1T.png)
 令牌为：
 
 ```bash
 eyJhbGciOiJSUzI1NiIsImtpZCI6Ikd0NHZ5X3RHZW5pNDR6WEdldmlQUWlFM3IxbGM3aEIwWW1IRUdZU1ZKdWMifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkYXNoYm9hcmQtYWRtaW4tdG9rZW4tNms1ZjYiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGFzaGJvYXJkLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiZjk1NDE0ODEtMTUyZS00YWUxLTg2OGUtN2JmMWU5NTg3MzNjIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmVybmV0ZXMtZGFzaGJvYXJkOmRhc2hib2FyZC1hZG1pbiJ9.LAe7N8Q6XR3d0W8w-r3ylOKOQHyMg5UDfGOdUkko_tqzUKUtxWQHRBQkowGYg9wDn-nU9E-rkdV9coPnsnEGjRSekWLIDkSVBPcjvEd0CVRxLcRxP6AaysRescHz689rfoujyVhB4JUfw1RFp085g7yiLbaoLP6kWZjpxtUhFu-MKh1NOp7w4rT66oFKFR-_5UbU3FoetAFBmHuZ935i5afs8WbNzIkM6u9YDIztMY3RYLm9Zs4KxgpAmqUmBSlXFZNW2qg6hxBqDijW_1bc0V7qJNt_GXzPs2Jm1trZR6UU1C2NAJVmYBu9dcHYtTCgxxkWKwR0Qd2bApEUIJ5Wug
-
 ```
 
 ### 3.4 访问
 
 **请使用火狐浏览器访问：**https://VIP:30001
-![图片.png](https://ask.qcloudimg.com/draft/6211241/6aljngufdx.png)
+![image-20200309001555462](https://i.loli.net/2020/03/09/fI5bonqsWB8ycpl.png)
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/oz52kv4s2v.png)
+![image-20200309001628035](https://i.loli.net/2020/03/09/s9SGj2oVcwy46Hb.png)
 
 接受风险
-![图片.png](https://ask.qcloudimg.com/draft/6211241/8q9ex9qkz9.png)
+![image-20200309001701935](https://i.loli.net/2020/03/09/2xuaKjInWo8Ag9c.png)
 通过令牌方式登录
-![图片.png](https://ask.qcloudimg.com/draft/6211241/dm480r5nr4.png)
+![image-20200309001815374](https://i.loli.net/2020/03/09/9EuiyVL5F4jIdA2.png)
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/0fd1c8ybag.png)
+![image-20200309001843108](https://i.loli.net/2020/03/09/jh1XAzypYPdsFtl.png)
 
 Dashboard提供了可以实现集群管理、工作负载、服务发现和负载均衡、存储、字典配置、日志视图等功能。
 
@@ -1076,7 +1010,6 @@ Dashboard提供了可以实现集群管理、工作负载、服务发现和负�
 ```bash
 [root@master01 ~]# ip a|grep 130
     inet 172.27.34.130/32 scope global ens160
-
 ```
 
 ```bash
@@ -1084,10 +1017,9 @@ Dashboard提供了可以实现集群管理、工作负载、服务发现和负�
     control-plane.alpha.kubernetes.io/leader: '{"holderIdentity":"master01_6caf8003-052f-451d-8dce-4516825213ad","leaseDurationSeconds":15,"acquireTime":"2020-01-02T09:36:23Z","renewTime":"2020-01-03T07:57:55Z","leaderTransitions":2}'
 [root@client ~]# kubectl get endpoints kube-scheduler -n kube-system -o yaml |grep holderIdentity
     control-plane.alpha.kubernetes.io/leader: '{"holderIdentity":"master01_720d65f9-e425-4058-95d7-e5478ac951f7","leaseDurationSeconds":15,"acquireTime":"2020-01-02T09:36:20Z","renewTime":"2020-01-03T07:58:03Z","leaderTransitions":2}'
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/sbdtaosx55.png)
+![image-20200309001920282](https://i.loli.net/2020/03/09/O4WS7M8ZDphbNcY.png)
 
 |       组件名       | 所在节点 |
 | :----------------: | :------: |
@@ -1140,10 +1072,9 @@ master03   Ready      master   22h   v1.16.4
 work01     Ready      <none>   22h   v1.16.4
 work02     Ready      <none>   22h   v1.16.4
 work03     Ready      <none>   22h   v1.16.4
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/7hif2a5do7.png)
+![image-20200309002007481](https://i.loli.net/2020/03/09/5rhTPMGWzK6Ejnd.png)
 
 master01状态为NotReady
 
@@ -1175,10 +1106,9 @@ NAME                            READY   STATUS    RESTARTS   AGE     IP         
 nginx-master-75b7bfdb6b-lnsfh   1/1     Running   0          4m44s   10.244.5.6   work03   <none>           <none>
 nginx-master-75b7bfdb6b-vxfg7   1/1     Running   0          4m44s   10.244.3.3   work01   <none>           <none>
 nginx-master-75b7bfdb6b-wt9kc   1/1     Running   0          4m44s   10.244.4.5   work02   <none>           <none>
-
 ```
 
-![图片.png](https://ask.qcloudimg.com/draft/6211241/rg2gngobh3.png)
+![image-20200309002041418](https://i.loli.net/2020/03/09/uKT7dO2sxQ5oRnk.png)
 
 ### 2.4 结论
 
@@ -1192,7 +1122,6 @@ nginx-master-75b7bfdb6b-wt9kc   1/1     Running   0          4m44s   10.244.4.5 
 
 ```bash
 [root@master02 ~]# init 0
-
 ```
 
 ### 3.2 查看VIP：
@@ -1215,3 +1144,9 @@ The connection to the server 172.27.34.130:6443 was refused - did you specify th
 
 etcd集群崩溃，整个k8s集群也不能正常对外服务。
 
+&nbsp;
+
+&nbsp;
+
+**单节点版k8s集群部署详见：**[Centos7.6部署k8s(v1.14.2)集群 ](https://blog.51cto.com/3241766/2405624)
+**k8s集群高可用部署详见：**[lvs+keepalived部署k8s v1.16.4高可用集群 ](https://blog.51cto.com/3241766/2467865)
