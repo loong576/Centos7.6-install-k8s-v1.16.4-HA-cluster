@@ -6,9 +6,9 @@ apiServer:
   - master01
   - master02
   - master03
-  - node01
-  - node02
-  - node03
+  - work01
+  - work02
+  - work03
   - 172.27.34.3
   - 172.27.34.4
   - 172.27.34.5
